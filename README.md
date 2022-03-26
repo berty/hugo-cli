@@ -1,40 +1,35 @@
-# hugo-cli
+# `berty-cli` NPM package
 
-[![CI](https://github.com/nikku/hugo-cli/actions/workflows/CI.yml/badge.svg)](https://github.com/nikku/hugo-cli/actions/workflows/CI.yml)
 
-A simple Node wrapper around [hugo, the static site generator](http://gohugo.io). It fetches the right hugo executable before piping all provided command line arguments to it.
+
+[![CI](https://github.com/berty/berty-cli/actions/workflows/CI.yml/badge.svg)](https://github.com/berty/berty-cli/actions/workflows/CI.yml)
+
+A simple Node wrapper around [berty](https://berty.tech). It fetches the right berty executable before piping all provided command line arguments to it.
 
 
 ## Usage
 
-```bash
-$ node_modules/.bin/hugo -h
-INFO hugo not found. Attempting to fetch it...
-INFO fetched hugo v0.45.1
+```console
+$ node_modules/.bin/berty -h
+INFO berty not found. Attempting to fetch it...
+INFO fetched berty v2.364.5
 INFO extracting archive...
-INFO hugo available, let's go!
+INFO berty available, let's go!
 
-hugo is the main command, used to build your Hugo site.
+USAGE
+  berty [global flags] <subcommand> [flags] [args...]
 
-Hugo is a Fast and Flexible Static Site Generator
-built with love by spf13 and friends in Go.
-
-Complete documentation is available at http://gohugo.io/.
-
-Usage:
-  hugo [flags]
-  hugo [command]
-
+SUBCOMMANDS
+  daemon        start a full Berty instance (Berty Protocol + Berty Messenger)
 ...
 ```
 
-### Download specific hugo version
+### Download specific berty version
 
-If you want to download a specific hugo version, you can set `HUGO_VERSION` env before you run the command.
+If you want to download a specific berty version, you can set `BERTY_VERSION` env before you run the command.
 
 ```bash
-$ HUGO_VERSION=0.64.0 npx hugo-cli version
-$ HUGO_VERSION=0.64.0/extended npx hugo-cli version
+$ BERTY_VERSION=2.364.5 npx berty-cli version
 ```
 
 
@@ -45,10 +40,10 @@ Add to your build scripts in `package.json` to build you site from NodeJS:
 ```json
   ...
   "scripts": {
-    "build": "hugo"
+    "daemon": "berty daemon"
   },
   "dependencies": {
-    "hugo-cli": "*"
+    "berty-cli": "*"
   },
   ...
 ```
@@ -56,10 +51,12 @@ Add to your build scripts in `package.json` to build you site from NodeJS:
 Execute directly via [`npx`](https://www.npmjs.com/package/npx):
 
 ```bash
-npx hugo-cli server
+npx berty-cli daemon
 ```
 
 
 ## License
+
+_based on https://github.com/nikku/hugo-cli by Nico Rehwaldt_
 
 MIT
