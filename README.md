@@ -1,8 +1,8 @@
-# `berty-cli` NPM package
+# `@berty/cli` NPM package
 
 
 
-[![CI](https://github.com/berty/berty-cli/actions/workflows/CI.yml/badge.svg)](https://github.com/berty/berty-cli/actions/workflows/CI.yml)
+[![CI](https://github.com/berty/npm-berty-cli/actions/workflows/CI.yml/badge.svg)](https://github.com/berty/npm-berty-cli/actions/workflows/CI.yml)
 
 A simple Node wrapper around [berty](https://berty.tech). It fetches the right berty executable before piping all provided command line arguments to it.
 
@@ -29,7 +29,7 @@ SUBCOMMANDS
 If you want to download a specific berty version, you can set `BERTY_VERSION` env before you run the command.
 
 ```bash
-$ BERTY_VERSION=2.364.5 npx berty-cli version
+$ BERTY_VERSION=2.364.5 npx @berty/cli version
 ```
 
 
@@ -40,10 +40,10 @@ Add to your build scripts in `package.json` to build you site from NodeJS:
 ```json
   ...
   "scripts": {
-    "daemon": "berty daemon"
+    "berty-daemon": "berty account-daemon -node.account.listeners /ip4/127.0.0.1/tcp/9092/grpcws -node.listeners /ip4/127.0.0.1/tcp/9091/grpcws --log.filters=bty.grpc"
   },
   "dependencies": {
-    "berty-cli": "*"
+    "@berty/cli": "*"
   },
   ...
 ```
@@ -51,7 +51,7 @@ Add to your build scripts in `package.json` to build you site from NodeJS:
 Execute directly via [`npx`](https://www.npmjs.com/package/npx):
 
 ```bash
-npx berty-cli daemon
+npx @berty/cli daemon
 ```
 
 
