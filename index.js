@@ -10,10 +10,9 @@ var cliVersion = require('./package').version;
 
 var chalk = require('chalk');
 
-var HUGO_BASE_URL = 'https://github.com/gohugoio/hugo/releases/download';
-var HUGO_MIN_VERSION = '0.20.0';
-var HUGO_DEFAULT_VERSION = process.env.HUGO_VERSION || '0.52.0';
-var HUGO_MIN_VERSION_NEW_URL_SCHEMA = '0.54.0';
+var BERTY_BASE_URL = 'https://github.com/berty/berty/releases/download';
+var BERTY_MIN_VERSION = '2.364.5';
+var BERTY_DEFAULT_VERSION = process.env.BERTY_VERSION || '2.364.5';
 
 var TARGET = {
   platform: process.platform,
@@ -21,11 +20,9 @@ var TARGET = {
 };
 
 var PLATFORM_LOOKUP = {
-  darwin: 'macOS',
-  freebsd: 'FreeBSD',
-  linux: 'Linux',
-  openbsd: 'OpenBSD',
-  win32: 'Windows'
+  darwin: 'darwin',
+  linux: 'linux',
+  win32: 'windows'
 };
 
 function download(url, target, callback) {
@@ -38,7 +35,7 @@ function download(url, target, callback) {
 }
 
 function extract(archivePath, destPath, installDetails) {
-  var executableName = 'hugo' + installDetails.executableExtension;
+  var executableName = 'berty' + installDetails.executableExtension;
 
   return decompress(archivePath, destPath,
     {
@@ -56,7 +53,7 @@ function extract(archivePath, destPath, installDetails) {
 
 
 /**
- * Return the installation / download details for the given hugo version.
+ * Return the installation / download details for the given berty version.
  *
  * @param  {String} version
  * @return {Object}
@@ -64,17 +61,17 @@ function extract(archivePath, destPath, installDetails) {
 function getDetails(version, target) {
 
   var arch_exec = '386',
-      arch_dl = '-32bit',
-      platform = target.platform,
-      archiveExtension = '.tar.gz',
-      executableExtension = '';
+    arch_dl = '_i386',
+    platform = target.platform,
+    archiveExtension = '.tar.gz',
+    executableExtension = '';
 
   if (/x64/.test(target.arch)) {
     arch_exec = 'amd64';
-    arch_dl = '-64bit';
+    arch_dl = '_amd64';
   } else if (/arm/.test(target.arch)) {
-    arch_exec = 'arm';
-    arch_dl = '_ARM';
+    arch_exec = 'arm64';
+    arch_dl = '_arm64';
   }
 
   if (/win32/.test(platform)) {
@@ -83,28 +80,21 @@ function getDetails(version, target) {
     archiveExtension = '.zip';
   }
 
-  var baseName = 'hugo_${version}'.replace(/\$\{version\}/g, version);
+  var baseName = 'berty_${version}'.replace(/\$\{version\}/g, version);
 
-  var baseVersion = version.replace(/^extended_/, '');
-
-  var executableName =
-    '${baseName}_${platform}_${arch}${executableExtension}'
-      .replace(/\$\{baseName\}/g, baseName)
-      .replace(/\$\{platform\}/g, platform)
-      .replace(/\$\{arch\}/g, arch_exec)
-      .replace(/\$\{executableExtension\}/g, executableExtension);
+  var executableName = 'berty${executableExtension}'.replace(/\$\{executableExtension\}/g, executableExtension);
 
   var archiveName =
-    '${baseName}_${platform}${arch}${archiveExtension}'
+    'berty_${platform}${arch}${archiveExtension}'
       .replace(/\$\{baseName\}/g, baseName)
       .replace(/\$\{platform\}/g, PLATFORM_LOOKUP[target.platform])
       .replace(/\$\{arch\}/g, arch_dl)
       .replace(/\$\{archiveExtension\}/g, archiveExtension);
 
   var downloadLink =
-    '${baseUrl}/v${baseVersion}/${archiveName}'
-      .replace(/\$\{baseUrl\}/g, HUGO_BASE_URL)
-      .replace(/\$\{baseVersion\}/g, baseVersion)
+    '${baseUrl}/v${version}/${archiveName}'
+      .replace(/\$\{baseUrl\}/g, BERTY_BASE_URL)
+      .replace(/\$\{version\}/g, version)
       .replace(/\$\{archiveName\}/g, archiveName);
 
   return {
@@ -117,38 +107,34 @@ function getDetails(version, target) {
 
 
 /**
- * Ensure the given version of hugo is installed before
+ * Ensure the given version of berty is installed before
  * passing (err, executablePath) to the callback.
  *
  * @param  {Object} options
  * @param  {Function} callback
  */
-function withHugo(options, callback) {
+function withBerty(options, callback) {
 
   if (typeof options === 'function') {
     callback = options;
     options = '';
   }
 
-  var version = options.version || HUGO_DEFAULT_VERSION;
+  var version = options.version || BERTY_DEFAULT_VERSION;
   var verbose = options.verbose;
 
-  verbose && logDebug('target=%o, hugo=%o', TARGET, { version });
+  verbose && logDebug('target=%o, berty=%o', TARGET, { version });
 
   // strip of _extended prefix for semver check to work
   var extended = /^extended_|\/extended$/.test(version);
   var compatVersion = version.replace(/^extended_|\/extended$/, '');
 
-  if (semver.lt(compatVersion, HUGO_MIN_VERSION)) {
+  if (semver.lt(compatVersion, BERTY_MIN_VERSION)) {
 
-    logError('hugo-cli@%s is compatible with hugo >= %s only.', cliVersion, HUGO_MIN_VERSION);
-    logError('you requested hugo@%s', version);
+    logError('berty-cli@%s is compatible with berty >= %s only.', cliVersion, BERTY_MIN_VERSION);
+    logError('you requested berty@%s', version);
 
-    return callback(new Error(`incompatible with hugo@${version}`));
-  }
-
-  if (semver.lt(compatVersion, HUGO_MIN_VERSION_NEW_URL_SCHEMA)) {
-    compatVersion = (compatVersion.endsWith('.0')) ? compatVersion.slice(0, -2) : compatVersion;
+    return callback(new Error(`incompatible with berty@${version}`));
   }
 
   var pwd = __dirname;
@@ -158,17 +144,17 @@ function withHugo(options, callback) {
   var installDirectory = path.join(pwd, 'tmp');
 
   var archivePath = path.join(installDirectory, installDetails.archiveName),
-      executablePath = path.join(installDirectory, installDetails.executableName);
+    executablePath = path.join(installDirectory, installDetails.executableName);
 
   verbose && logDebug('searching executable at <%s>', executablePath);
 
   if (fs.existsSync(executablePath)) {
-    verbose && logDebug('hugo found\n');
+    verbose && logDebug('berty found\n');
 
     return callback(null, executablePath);
   }
 
-  log('hugo not found. Attempting to fetch it...');
+  log('berty not found. Attempting to fetch it...');
 
   var mkdirp = require('mkdirp');
 
@@ -182,12 +168,12 @@ function withHugo(options, callback) {
     var extractPath = path.dirname(archivePath);
 
     if (err) {
-      logError('failed to download hugo: ' + err);
+      logError('failed to download berty: ' + err);
 
       return callback(err);
     }
 
-    log('fetched hugo %s', version);
+    log('fetched berty %s', version);
 
     log('extracting archive...');
 
@@ -202,7 +188,7 @@ function withHugo(options, callback) {
         throw new Error('executable not found');
       }
 
-      log('hugo available, let\'s go!\n');
+      log('berty available, let\'s go!\n');
 
       callback(null, executablePath);
     }, function(err) {
@@ -230,4 +216,4 @@ function logError(fmt, ...args) {
 
 module.exports.getDetails = getDetails;
 
-module.exports.withHugo = withHugo;
+module.exports.withBerty = withBerty;

@@ -15,15 +15,14 @@ var options = {
   verbose: args.find((a) => /-([^\s]*v[^\s]*|-verbose)/.test(a))
 };
 
-cli.withHugo(options, function(err, hugoPath) {
+cli.withBerty(options, function(err, bertyPath) {
 
   if (err) {
-    console.error('failed to grab hugo :-(');
+    console.error('failed to grab berty :-(');
     console.error(err);
 
     process.exit(1);
   }
 
-  process.exit(spawnSync(hugoPath, args, { stdio: 'inherit' }).status);
+  process.exit(spawnSync(bertyPath, args, { stdio: 'inherit' }).status);
 });
-

@@ -1,16 +1,16 @@
 {
-  "name": "hugo-cli",
-  "version": "0.11.0",
-  "description": "A node friendly wrapper around hugo (http://gohugo.io/)",
+  "name": "berty-cli",
+  "version": "0.0.0",
+  "description": "A node friendly wrapper around berty (https://berty.tech/)",
   "scripts": {
     "all": "run-s lint test",
     "lint": "eslint .",
     "test": "mocha"
   },
   "bin": {
-    "hugo": "bin/cmd.js"
+    "berty": "bin/cmd.js"
   },
-  "author": "Nico Rehwaldt<git_nikku@nixis.de>",
+  "author": "Berty Team",
   "license": "MIT",
   "dependencies": {
     "chalk": "^2.4.1",
@@ -22,14 +22,14 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/nikku/hugo-cli.git"
+    "url": "git://github.com/berty/npm-berty-cli.git"
   },
   "keywords": [
     "wrapper",
-    "static site generator"
+    "berty"
   ],
   "bugs": {
-    "url": "https://github.com/nikku/hugo-cli/issues"
+    "url": "https://github.com/berty/npm-berty-cli/issues"
   },
   "devDependencies": {
     "eslint": "^5.10.0",
