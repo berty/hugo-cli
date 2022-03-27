@@ -60,17 +60,14 @@ function extract(archivePath, destPath, installDetails) {
  */
 function getDetails(version, target) {
 
-  var arch_exec = '386',
-    arch_dl = '_i386',
-    platform = target.platform,
-    archiveExtension = '.tar.gz',
-    executableExtension = '';
+  var arch_dl = '_i386',
+      platform = target.platform,
+      archiveExtension = '.tar.gz',
+      executableExtension = '';
 
   if (/x64/.test(target.arch)) {
-    arch_exec = 'amd64';
     arch_dl = '_amd64';
   } else if (/arm/.test(target.arch)) {
-    arch_exec = 'arm64';
     arch_dl = '_arm64';
   }
 
@@ -144,7 +141,7 @@ function withBerty(options, callback) {
   var installDirectory = path.join(pwd, 'tmp');
 
   var archivePath = path.join(installDirectory, installDetails.archiveName),
-    executablePath = path.join(installDirectory, installDetails.executableName);
+      executablePath = path.join(installDirectory, installDetails.executableName);
 
   verbose && logDebug('searching executable at <%s>', executablePath);
 

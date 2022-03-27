@@ -1,5 +1,5 @@
 {
-  "name": "berty-cli",
+  "name": "@berty/cli",
   "version": "0.0.0",
   "description": "A node friendly wrapper around berty (https://berty.tech/)",
   "scripts": {

@@ -18,7 +18,6 @@ describe('cmd', function() {
 
 
   describe('should propagate exit status', function() {
-    return;
     // increase test timeout
     this.timeout(20000);
 
@@ -31,7 +30,7 @@ describe('cmd', function() {
     it('0 when successful', function() {
 
       // executing berty version sets exit code to 0
-      var result = exec('node_modules/berty-cli/bin/cmd.js', [
+      var result = exec('node_modules/@berty/cli/bin/cmd.js', [
         'version'
       ], {
         cwd
@@ -72,7 +71,7 @@ function install(version) {
   // install cli from cwd
   exec('npm', [
     'install',
-    `berty-cli@${wd}`
+    `@berty/cli@${wd}`
   ], {
     cwd
   });
@@ -98,12 +97,11 @@ function verify(version, cliEnv = {}) {
       env: cliEnv
     });
 
-    var expectedVersion = version;
 
     var stdout = result.stdout;
 
     // tmp @moul: a basic check for the 'version' string
-    if (!(stdout.indexOf(`version`) >= 0)) {
+    if (!(stdout.indexOf('version') >= 0)) {
       throw new Error(
         `expected <berty version> to report:
 
@@ -117,22 +115,23 @@ function verify(version, cliEnv = {}) {
       );
     }
 
+    // temporarily disabled by @moul, because the output of `berty --version` looks not reliable for this kind of tests
+    /*
+    var expectedVersion = version;
+    if (!(stdout.indexOf(`version  v${expectedVersion}`) >= 0)) {
+      throw new Error(
+        `expected <berty version> to report:
 
-    if (false) { // temporarily disabled by @moul, because the output of `berty --version` looks not reliable for this kind of tests
-      if (!(stdout.indexOf(`version  v${expectedVersion}`) >= 0)) {
-        throw new Error(
-          `expected <berty version> to report:
+        version  v${expectedVersion}
 
-          version  v${expectedVersion}
+      found:
 
-        found:
+        ${stdout}
 
-          ${stdout}
-
-        `
-        );
-      }
+      `
+      );
     }
+  */
   });
 
 
