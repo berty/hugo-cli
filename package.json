@@ -1,6 +1,6 @@
 {
   "name": "@berty/cli",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A node friendly wrapper around berty (https://berty.tech/)",
   "scripts": {
     "all": "run-s lint test",
